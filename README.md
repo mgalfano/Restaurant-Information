@@ -37,3 +37,41 @@ npm install -g webpack
 npm install
 ```
 
+## API Documentation
+---
+
+`GET /currentRestaurant`
+
+  Return JSON data for the current restaurant
+
+  Sample response:
+  
+    [{"id":11,"category":"French","restaurantname":"Jerde - Yundt","claimed":"true","prize":"$","restaurant_id":7,"rating":3,"date":"2019-11-14T08:00:00.000Z"}]
+
+`POST /currentRestaurant`
+
+  Add new restaurant
+
+`PUT /currentRestaurant`
+
+  Replace data for current restaurant
+
+`DELETE /currentRestaurant`
+
+  Delete entry of current restaurant
+
+`GET /restaurant`
+
+  Return randomly selected restaurant
+
+`POST /resaurant`
+
+  Add new restaurant
+
+`PUT /restaurant`
+
+  Replace data for specified restaurant
+
+`DELETE /restaurant`
+
+  Delete entry of specified restaurant
