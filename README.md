@@ -48,29 +48,51 @@ npm install
   
     [{"id":11,"category":"French","restaurantname":"Jerde - Yundt","claimed":"true","prize":"$","restaurant_id":7,"rating":3,"date":"2019-11-14T08:00:00.000Z"}]
 
+---
+
 `POST /currentRestaurant`
 
   Add new restaurant
+
+---
 
 `PUT /currentRestaurant`
 
   Replace data for current restaurant
 
+---
+
 `DELETE /currentRestaurant`
 
   Delete entry of current restaurant
 
+---
+
 `GET /restaurant`
 
-  Return randomly selected restaurant
+  Return JSON data for randomly selected restaurant
+
+  Sample response:
+
+    [{"id":147,"category":"Vietamese","restaurantname":"Thompson - Berge","claimed":"false","prize":"$$","restaurant_id":73,"rating":4,"date":"2020-01-21T08:00:00.000Z"}]
+
+---
 
 `POST /resaurant`
 
-  Add new restaurant
+  Add new rating for selected restaurant
+
+  Sample request:
+
+    { rating: 5, comment: 'sdfsdghsdh', name: 'Hagenes Inc' }
+
+---
 
 `PUT /restaurant`
 
   Replace data for specified restaurant
+
+  ---
 
 `DELETE /restaurant`
 
