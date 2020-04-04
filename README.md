@@ -37,63 +37,132 @@ npm install -g webpack
 npm install
 ```
 
-## API Documentation
----
+# API Documentation
 
-`GET /currentRestaurant`
+<!-- ## Get all restaurants
+```
+GET /api/restaurants
+```
 
-  Return JSON data for the current restaurant
+Example output:  -->
 
-  Sample response:
-  
-    [{"id":11,"category":"French","restaurantname":"Jerde - Yundt","claimed":"true","prize":"$","restaurant_id":7,"rating":3,"date":"2019-11-14T08:00:00.000Z"}]
+## Get a restaurant info
+```
+GET /api/restaurants/:id
+```
+Returns JSON data for a restaurant with the specified `id`
 
----
+Sample response:
+```
+{"id":11,"category":"French","restaurantname":"Jerde - Yundt","claimed":"true","prize":"$","restaurant_id":7,"rating":3,"date":"2019-11-14T08:00:00.000Z"}]
+```
 
-`POST /currentRestaurant`
+## Get reviews for one restaurant
+```
+GET /api/restaurants/:id/reviews
+```
+Returns JSON data of all reviews for a restaurant with specified `id`
 
-  Add new restaurant
+Response data:
+```
+{"id":1,"user_id":1,"rating":3,"date":"2019-11-14T08:00:00.000Z"}
+```
 
----
+## Get info about one user
+```
+GET /api/users/:id
+```
+Returns JSON data of info about a specified user of `id`
 
-`PUT /currentRestaurant`
+Response data:
+```
+{"id":1,"first_name":"bob","last_name":"builder","email":"email@domain.com"}
+```
 
-  Replace data for current restaurant
+## Get all reviews from one user
+```
+GET /api/users/:id/reviews
+```
+Return JSON data of all reviews by user of `id`
 
----
+Sample response of one review:
+```
+{"id":1,"restaurant_id":314,"user_id":33,"rating":4,"date":"2019-11-14T08:00:00.000Z"}
+```
 
-`DELETE /currentRestaurant`
+## Add new restaurant
+```
+POST /api/restaurants
+```
+Send JSON data to add a new restaurant
 
-  Delete entry of current restaurant
+Sample request:
+```
+{"name":"burger shop","category":"american","price":2,"is_claimed":"false"}
+```
 
----
+## Add a new review for a restaurant
+```
+POST /api/restaurants/:id/reviews
+```
+Send JSON data to add a review for restaurant `id`
 
-`GET /restaurant`
+Sample request:
+```
+{"restaurant_id":54,"user_id":3,"rating":4,"date":"2019-11-14T08:00:00.000Z"}
+```
 
-  Return JSON data for randomly selected restaurant
+## Add a new user
+```
+POST /api/users
+```
+Send JSON data to add a user
+Sample request:
+```
+{"first_name":"bob","last_name":"builder","email":"email@domain.com"}
+```
 
-  Sample response:
+## Edit info for a restaurant
+```
+PUT /api/restaurants/:id
+```
+Update info for a restaurant at `id`
 
-    [{"id":147,"category":"Vietamese","restaurantname":"Thompson - Berge","claimed":"false","prize":"$$","restaurant_id":73,"rating":4,"date":"2020-01-21T08:00:00.000Z"}]
+Sample request:
+```
+{"id":4,"name":"burgerland","category":"american","price":2,"is_claimed":"true"}
+```
 
----
+<!-- ## Edit a review of a restaurant
+```
+PUT /api/restaurants/:id/reviews/:id
+``` -->
 
-`POST /resaurant`
 
-  Add new rating for selected restaurant
+<!-- PUT /api/users/:id
+# Edit info for a user -->
 
-  Sample request:
+## Delete a restaurant
+```
+DELETE /api/restaurants/:id
+```
+Remove restaurant info at `id`
 
-    { rating: 5, comment: 'sdfsdghsdh', name: 'Hagenes Inc' }
+Sample request:
+```
+{"id":5}
+```
 
----
+<!-- DELETE /api/restaurants/:id/reviews/:id
+# Delete a review of a restaurant -->
 
-`PUT /restaurant`
+## Delete a user
+```
+DELETE /api/users/:id
+```
+Remove user info at `id`
 
-  Replace data for specified restaurant
-
-  ---
-
-`DELETE /restaurant`
-
-  Delete entry of specified restaurant
+Sample request:
+```
+{"id":41}
+```
