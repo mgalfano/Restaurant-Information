@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const db = require('../db/db.js')
+const db = require('../db-postgresql/db.js');
+// const db = require('../db/db.js');
 
 const app = express();
 const port = 8000;
@@ -16,6 +17,29 @@ app.use(express.static(__dirname + '/../client/dist'));
 
 let lastRetaurant;
 
+app.get('/api/restaurants', (req, res) => {
+  const randomRestaurant = Math.floor(Math.random() * 10000000) +1;
+  db.query(`SELECT * FROM restaurants INNER JOIN reviews ON restaurants.id=restaurant_id WHERE restaurants.id = ${randomRestaurant}`, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      if (result.rows.length ===0) {
+        db.query(`SELECT * FROM restaurants where id=${randomRestaurant}`, (err,result) =>{
+          if (err) {
+            console.log(err);
+          } else {
+            res.send(result);
+          }
+        }) 
+      }else{
+        console.log(randomRestaurant);
+        lastRetaurant = randomRestaurant;
+        res.send(result)
+      }
+    }
+  });
+});
+
 app.get('/currentRestaurant', (req, res) =>{
   db.query(`SELECT * FROM restaurants INNER JOIN reviews ON restaurants.id=restaurant_id WHERE restaurants.id = ${lastRetaurant}`, (err, result) => {
     if (err) {
@@ -30,6 +54,7 @@ app.get('/currentRestaurant', (req, res) =>{
         }
       }) 
       }else{
+        console.log(result);
         res.send(result)
       }
     }
@@ -51,7 +76,6 @@ app.get('/restaurant', (req, res) =>{
           }
         }) 
       }else{
-        console.log(randomRestaurant);
         lastRetaurant = randomRestaurant;
         res.send(result)
       }

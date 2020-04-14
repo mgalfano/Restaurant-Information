@@ -39,4 +39,4 @@ function writeCsvReviews (numOfRecords) {
   });
 }
 
-writeCsvReviews(1000);
+writeCsvReviews(10000000);

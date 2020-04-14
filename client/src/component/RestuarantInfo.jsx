@@ -22,7 +22,8 @@ class RestaurantInfo extends React.Component {
     const that = this;
     $.ajax({
       method: 'GET',
-      url: '/restaurant',
+      url: '/api/restaurants',
+      // url: '/restaurant',
       dataType: 'json',
       success: (data) => {
         console.log('this is my ajax call from restaurant Info', data);
@@ -37,18 +38,18 @@ class RestaurantInfo extends React.Component {
   updateState (data) {
     var claimStatus;
     const allReview = [];
-    if (data[0].claimed === 'true') {
+    if (data.rows[0].is_claimed === 'true') {
       claimStatus = 'Claimed';
     } else {
       claimStatus = 'Unclaimed';
     }
     const restaurant = {
-      claimed: claimStatus, name: data[0].restaurantname, price: data[0].prize, category: data[0].category 
+      claimed: claimStatus, name: data.rows[0].name, price: '$'.repeat(data.rows[0].price), category: data.rows[0].category 
     };
-    if (data[0].rating !== undefined) {
-      let average = data.reduce((accumulator, currentObj) => {
+    if (data.rows[0].rating !== undefined) {
+      let average = data.rows.reduce((accumulator, currentObj) => {
         return accumulator + currentObj.rating
-      }, 0) / data.length;
+      }, 0) / data.rows.length;
 
       if (average % 1 < 0.76 && average % 1 > 0.24) {
         average = Math.floor(average) + 0.5;
@@ -56,12 +57,12 @@ class RestaurantInfo extends React.Component {
         average = Math.round(average);
       }
 
-      var review = { AverageRating: average, amount: data.length };
+      var review = { AverageRating: average, amount: data.rows.length };
     } else {
       var review = { AverageRating: 0, amount: 0 }
     }
-    if (data[0].rating !== undefined) {
-      data.forEach((review) => {
+    if (data.rows[0].rating !== undefined) {
+      data.rows.forEach((review) => {
         allReview.push({ rating: review.rating, date: review.date });
       });
     }
@@ -212,7 +213,7 @@ updateWriteReviewClickStatus() {
             <span className={styles.save_info_text}>Save</span>
           </button>
           <button className={styles.follow_button_info} type="button">
-            <span><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" classNmae={styles.icon_svg_plus}><path d="M16 10h-6v6H8v-6H2V8h6V2h2v6h6v2z"></path></svg></span>
+            <span><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" className={styles.icon_svg_plus}><path d="M16 10h-6v6H8v-6H2V8h6V2h2v6h6v2z"></path></svg></span>
             <span className={styles.follow_info_text}>Follow</span>
           </button>
         </div>

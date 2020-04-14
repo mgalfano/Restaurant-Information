@@ -27,8 +27,10 @@ CREATE TABLE users (
 
 CREATE TABLE reviews (
   id SERIAL PRIMARY KEY,
-  restaurant_id INT REFERENCES restaurants(id),
-  user_id INT REFERENCES users(id),
+  -- restaurant_id INT REFERENCES restaurants(id),
+  -- user_id INT REFERENCES users(id),
+  restaurant_id INT,
+  user_id INT,
   rating SMALLINT,
   date DATE
 );

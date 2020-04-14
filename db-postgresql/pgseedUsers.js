@@ -37,4 +37,4 @@ function writeCsvUsers (numOfRecords) {
   });
 }
 
-writeCsvUsers(1000);
+writeCsvUsers(10000000);

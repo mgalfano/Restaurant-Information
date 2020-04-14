@@ -1,3 +1,13 @@
 node_modules/
 bundle.js
 coverage/
+db-cassandra/restaurants.csv
+db-cassandra/reviews.csv
+db-cassandra/users.csv
+db-cassandra/text.txt
+db-postgresql/restaurants.csv
+db-postgresql/reviews_short.csv
+db-postgresql/reviews.csv
+db-postgresql/users.csv
+db-postgresql/notes.txt
+_testSchema.js
