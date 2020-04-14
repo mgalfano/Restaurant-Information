@@ -22,14 +22,15 @@ class WriteReview extends React.Component {
     this.props.updateReviewFormStatus();
     $.ajax({
       method: 'POST',
-      url: '/restaurant',
+      // url: '/restaurant',
+      url: '/api/restaurants',
       data: JSON.stringify({rating: this.state.rating, comment: this.state.input, name: this.props.name}),
       contentType: 'application/json',
       success: (data) => {
         console.log('successfully post',data);
         $.ajax({
           method: 'GET',
-          url: '/currentRestaurant',
+          url: '/api/restaurants',
           dataType: 'json',
           success: (data) => {
             console.log('this is my ajax call from write review', data);

@@ -16,8 +16,9 @@ app.use(bodyParser.json())
 app.use(express.static(__dirname + '/../client/dist'));
 
 let lastRetaurant;
+// let randomRestaurant = Math.floor(Math.random() * 10000000) +1;
 
-app.get('/api/restaurants', (req, res) => {
+app.get('/api/restaurants/random', (req, res) => {
   const randomRestaurant = Math.floor(Math.random() * 10000000) +1;
   db.query(`SELECT * FROM restaurants INNER JOIN reviews ON restaurants.id=restaurant_id WHERE restaurants.id = ${randomRestaurant}`, (err, result) => {
     if (err) {
@@ -32,7 +33,7 @@ app.get('/api/restaurants', (req, res) => {
           }
         }) 
       }else{
-        console.log(randomRestaurant);
+        console.log('randomRestaurant????????', randomRestaurant);
         lastRetaurant = randomRestaurant;
         res.send(result)
       }
@@ -40,50 +41,31 @@ app.get('/api/restaurants', (req, res) => {
   });
 });
 
-app.get('/currentRestaurant', (req, res) =>{
-  db.query(`SELECT * FROM restaurants INNER JOIN reviews ON restaurants.id=restaurant_id WHERE restaurants.id = ${lastRetaurant}`, (err, result) => {
+app.get('/api/restaurants', (req, res) => {
+  // const randomRestaurant = Math.floor(Math.random() * 10000000) +1;
+  console.log('lastRestaurant?????????', lastRetaurant);
+  db.query(`SELECT * FROM restaurants INNER JOIN reviews ON restaurants.id=restaurant_id WHERE restaurants.id = $1`, [lastRetaurant], (err, result) => {
     if (err) {
-      console.log(err);
+      console.log('error line 48??????', err);
     } else {
-      if (result.length ===0) {
-        db.query(`SELECT * FROM restaurants where id=${lastRetaurant}`, (err,result) =>{
+      if (result.rows.length ===0) {
+        db.query(`SELECT * FROM restaurants where id=$1`, [lastRetaurant], (err,result) =>{
           if (err) {
-            console.log(err);
-          } else {
-            res.send(result);
-        }
-      }) 
-      }else{
-        console.log(result);
-        res.send(result)
-      }
-    }
-  });
-})
-
-app.get('/restaurant', (req, res) =>{
-  const randomRestaurant = Math.floor(Math.random() * 100) +1;
-  db.query(`SELECT * FROM restaurants INNER JOIN reviews ON restaurants.id=restaurant_id WHERE restaurants.id = ${randomRestaurant}`, (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      if (result.length ===0) {
-        db.query(`SELECT * FROM restaurants where id=${randomRestaurant}`, (err,result) =>{
-          if (err) {
-            console.log(err);
+            console.log('error line 54?????????', err);
           } else {
             res.send(result);
           }
         }) 
       }else{
-        lastRetaurant = randomRestaurant;
+        // console.log(randomRestaurant);
+        // lastRetaurant = randomRestaurant;
         res.send(result)
       }
     }
-    });
+  });
 });
 
-app.post('/restaurant', (req,res) => {
+app.post('/api/restaurants', (req, res) => {
 
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, '0');
@@ -91,26 +73,26 @@ app.post('/restaurant', (req,res) => {
   var yyyy = today.getFullYear();
 
   today = yyyy + '-' + mm + '-' + dd;
-  var id;
-  db.query(`SELECT id from restaurants where restaurantname = "${req.body.name}"`, (err,result) =>{
+  // var id;
+  db.query(`SELECT id from restaurants where name = $1`, [req.body.name], (err, result) =>{
     if (err) {
       console.log('query', err)
     } else {
       console.log('yay', result);
-      id = result[0].id;
-      const queryString = `INSERT INTO reviews(rating, date, restaurant_id) VALUES (${req.body.rating},"${today}",${id})`
-      db.query(queryString, (err) => {
+      // id = result.rows[0].id;
+      const queryString = `INSERT INTO reviews(rating, date, restaurant_id) VALUES ($1,now(),$2)`
+      // console.log('id: ', id);
+      db.query(queryString, [req.body.rating, lastRetaurant], (err) => {
         if (err) {
           console.log(err);
         } else {
-          console.log('post successful line 54 post')
+          console.log('post successful line 89 post')
           res.end();
         }
       });
     }
   });
 });
-//   res.send('Hello World!')
-// )
+
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

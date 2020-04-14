@@ -22,7 +22,7 @@ class RestaurantInfo extends React.Component {
     const that = this;
     $.ajax({
       method: 'GET',
-      url: '/api/restaurants',
+      url: '/api/restaurants/random',
       // url: '/restaurant',
       dataType: 'json',
       success: (data) => {
