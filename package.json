@@ -23,6 +23,7 @@
     "jest-enzyme": "^7.1.2",
     "jquery": "^3.4.1",
     "mysql": "^2.18.1",
+    "newrelic": "^6.5.0",
     "pg": "^8.0.2",
     "react": "^16.13.0",
     "react-addons-test-utils": "^15.6.2",

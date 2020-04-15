@@ -1,3 +1,4 @@
+require('newrelic');
 const express = require('express');
 const bodyParser = require('body-parser');
 const db = require('../db-postgresql/db.js');
@@ -19,13 +20,13 @@ let lastRetaurant;
 // let randomRestaurant = Math.floor(Math.random() * 10000000) +1;
 
 app.get('/api/restaurants/random', (req, res) => {
-  const randomRestaurant = Math.floor(Math.random() * 10000000) +1;
-  db.query(`SELECT * FROM restaurants INNER JOIN reviews ON restaurants.id=restaurant_id WHERE restaurants.id = ${randomRestaurant}`, (err, result) => {
+  lastRetaurant = Math.floor(Math.random() * 10000000) +1;
+  db.query(`SELECT * FROM restaurants INNER JOIN reviews ON restaurants.id=restaurant_id WHERE restaurants.id = ${lastRetaurant}`, (err, result) => {
     if (err) {
       console.log(err);
     } else {
       if (result.rows.length ===0) {
-        db.query(`SELECT * FROM restaurants where id=${randomRestaurant}`, (err,result) =>{
+        db.query(`SELECT * FROM restaurants where id=${lastRetaurant}`, (err,result) =>{
           if (err) {
             console.log(err);
           } else {
@@ -33,8 +34,8 @@ app.get('/api/restaurants/random', (req, res) => {
           }
         }) 
       }else{
-        console.log('randomRestaurant????????', randomRestaurant);
-        lastRetaurant = randomRestaurant;
+        // console.log('randomRestaurant????????', randomRestaurant);
+        // lastRetaurant = randomRestaurant;
         res.send(result)
       }
     }
@@ -43,7 +44,7 @@ app.get('/api/restaurants/random', (req, res) => {
 
 app.get('/api/restaurants', (req, res) => {
   // const randomRestaurant = Math.floor(Math.random() * 10000000) +1;
-  console.log('lastRestaurant?????????', lastRetaurant);
+  // console.log('lastRestaurant?????????', lastRetaurant);
   db.query(`SELECT * FROM restaurants INNER JOIN reviews ON restaurants.id=restaurant_id WHERE restaurants.id = $1`, [lastRetaurant], (err, result) => {
     if (err) {
       console.log('error line 48??????', err);
@@ -53,12 +54,13 @@ app.get('/api/restaurants', (req, res) => {
           if (err) {
             console.log('error line 54?????????', err);
           } else {
+            // console.log('result @ inner query:', result);
             res.send(result);
           }
         }) 
       }else{
-        // console.log(randomRestaurant);
         // lastRetaurant = randomRestaurant;
+        // console.log('result @ outer query:', result);
         res.send(result)
       }
     }
@@ -74,22 +76,14 @@ app.post('/api/restaurants', (req, res) => {
 
   today = yyyy + '-' + mm + '-' + dd;
   // var id;
-  db.query(`SELECT id from restaurants where name = $1`, [req.body.name], (err, result) =>{
+  const queryString = `INSERT INTO reviews(rating, date, restaurant_id) VALUES ($1,now(),$2)`
+  // console.log('id: ', id);
+  db.query(queryString, [req.body.rating, lastRetaurant], (err) => {
     if (err) {
-      console.log('query', err)
+      console.log(err);
     } else {
-      console.log('yay', result);
-      // id = result.rows[0].id;
-      const queryString = `INSERT INTO reviews(rating, date, restaurant_id) VALUES ($1,now(),$2)`
-      // console.log('id: ', id);
-      db.query(queryString, [req.body.rating, lastRetaurant], (err) => {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log('post successful line 89 post')
-          res.end();
-        }
-      });
+      // console.log('post successful line 89 post')
+      res.end();
     }
   });
 });

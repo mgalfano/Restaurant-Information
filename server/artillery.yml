@@ -1,0 +1,15 @@
+config:
+  target: 'http://localhost:8000'
+  http:
+    pool: 20
+  phases:
+    - duration: 60
+      arrivalRate: 50
+scenarios:
+  - flow:
+    - get:
+        url: "/api/restaurants"
+    - get:
+        url: "/api/restaurants/random"
+    - post:
+        url: "/api/restaurants"
